@@ -1,0 +1,3 @@
+*.cc linguist-language=c++
+*.hh linguist-language=c++
+*.ini linguist-vendored=false

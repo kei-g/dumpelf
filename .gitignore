@@ -1,0 +1,8 @@
+**/*.cov
+**/*.o
+**/*.pch
+**/*.profdata
+**/*.proflog
+**/*.profraw
+**/.vscode/
+**/dumpelf

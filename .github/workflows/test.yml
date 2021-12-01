@@ -1,0 +1,30 @@
+jobs:
+  test:
+    name: Test
+    runs-on: ubuntu-latest
+    steps:
+      - id: built_cache_id
+        name: Extract built binary from cache
+        uses: actions/cache@v2
+        with:
+          key: ${{ github.sha }}
+          path: |
+            dumpelf
+            elf.ini
+      - name: Test
+        run: ./dumpelf dumpelf > dumpelf-output.log 2> dumpelf-error.log
+      - if: ${{ always() }}
+        name: Archive test log
+        uses: actions/upload-artifact@v2
+        with:
+          name: self-test
+          path: 'dumpelf-*.log'
+name: Test
+on:
+  workflow_run:
+    branches:
+      - main
+    types:
+      - completed
+    workflows:
+      - Build

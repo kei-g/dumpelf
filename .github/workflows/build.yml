@@ -1,0 +1,46 @@
+jobs:
+  build:
+    name: Build
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v2
+        with:
+          fetch-depth: 1
+      - name: Install dependencies
+        run: |
+          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
+          echo deb http://apt.llvm.org/focal/ llvm-toolchain-focal-13 main | sudo tee /etc/apt/sources.list.d/llvm.list > /dev/null
+          echo deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-13 main | sudo tee -a /etc/apt/sources.list.d/llvm.list > /dev/null
+          sudo apt-get update
+          sudo apt-get install -y clang-13 libc++-13-dev libc++abi-13-dev libunwind-13-dev lld-13
+      - name: Build
+        run: env PATH=/usr/lib/llvm-13/bin:$PATH make -j7
+      - id: built_cache_id
+        name: Cache built binary
+        uses: actions/cache@v2
+        with:
+          key: ${{ github.sha }}
+          path: |
+            dumpelf
+            elf.ini
+name: Build
+on:
+  pull_request:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - '.editorconfig'
+      - '.gitattributes'
+      - '.gitignore'
+      - 'LICENSE'
+  push:
+    branches:
+      - main
+    paths-ignore:
+      - '**.md'
+      - '.editorconfig'
+      - '.gitattributes'
+      - '.gitignore'
+      - 'LICENSE'
