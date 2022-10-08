@@ -19,7 +19,7 @@ jobs:
           env PATH=/usr/lib/llvm-16/bin:$PATH make -j7 cover
       - if: ${{ always() }}
         name: Archive code coverages report
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: code-coverages-report
           path: |

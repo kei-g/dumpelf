@@ -15,7 +15,7 @@ jobs:
         run: ./dumpelf dumpelf > dumpelf-output.log 2> dumpelf-error.log
       - if: ${{ always() }}
         name: Archive test log
-        uses: actions/upload-artifact@v2
+        uses: actions/upload-artifact@v3
         with:
           name: self-test
           path: 'dumpelf-*.log'
