@@ -10,13 +10,13 @@ jobs:
       - name: Install dependencies
         run: |
           wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-          echo deb http://apt.llvm.org/focal/ llvm-toolchain-focal-13 main | sudo tee /etc/apt/sources.list.d/llvm.list > /dev/null
-          echo deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-13 main | sudo tee -a /etc/apt/sources.list.d/llvm.list > /dev/null
+          echo deb http://apt.llvm.org/focal/ llvm-toolchain-focal-16 main | sudo tee /etc/apt/sources.list.d/llvm.list > /dev/null
+          echo deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-16 main | sudo tee -a /etc/apt/sources.list.d/llvm.list > /dev/null
           sudo apt-get update
-          sudo apt-get install -y clang-13 libc++-13-dev libc++abi-13-dev libunwind-13-dev lld-13
+          sudo apt-get install -y clang-16 libc++-16-dev libc++abi-16-dev libunwind-16-dev lld-16
       - name: Coverage
         run: |
-          env PATH=/usr/lib/llvm-13/bin:$PATH make -j7 cover
+          env PATH=/usr/lib/llvm-16/bin:$PATH make -j7 cover
       - if: ${{ always() }}
         name: Archive code coverages report
         uses: actions/upload-artifact@v2
