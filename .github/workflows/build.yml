@@ -10,12 +10,12 @@ jobs:
       - name: Install dependencies
         run: |
           wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-          echo deb http://apt.llvm.org/focal/ llvm-toolchain-focal-snapshot main | sudo tee /etc/apt/sources.list.d/llvm.list > /dev/null
-          echo deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-snapshot main | sudo tee -a /etc/apt/sources.list.d/llvm.list > /dev/null
+          echo deb http://apt.llvm.org/focal/ llvm-toolchain-focal-15 main | sudo tee /etc/apt/sources.list.d/llvm.list > /dev/null
+          echo deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-15 main | sudo tee -a /etc/apt/sources.list.d/llvm.list > /dev/null
           sudo apt-get update
-          sudo apt-get install -y clang-16 libc++-16-dev libc++abi-16-dev libunwind-16-dev lld-16
+          sudo apt-get install -y clang-15 libc++-15-dev libc++abi-15-dev libunwind-15-dev lld-15
       - name: Build
-        run: env PATH=/usr/lib/llvm-16/bin:$PATH make -j7
+        run: env PATH=/usr/lib/llvm-15/bin:$PATH make -j7
       - id: built_cache_id
         name: Cache built binary
         uses: actions/cache@v3
