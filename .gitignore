@@ -4,5 +4,4 @@
 **/*.profdata
 **/*.proflog
 **/*.profraw
-**/.vscode/
 **/dumpelf
