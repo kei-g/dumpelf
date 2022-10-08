@@ -10,8 +10,8 @@ jobs:
       - name: Install dependencies
         run: |
           wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-          echo deb http://apt.llvm.org/focal/ llvm-toolchain-focal-16 main | sudo tee /etc/apt/sources.list.d/llvm.list > /dev/null
-          echo deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-16 main | sudo tee -a /etc/apt/sources.list.d/llvm.list > /dev/null
+          echo deb http://apt.llvm.org/focal/ llvm-toolchain-focal-snapshot main | sudo tee /etc/apt/sources.list.d/llvm.list > /dev/null
+          echo deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-snapshot main | sudo tee -a /etc/apt/sources.list.d/llvm.list > /dev/null
           sudo apt-get update
           sudo apt-get install -y clang-16 libc++-16-dev libc++abi-16-dev libunwind-16-dev lld-16
       - name: Coverage
