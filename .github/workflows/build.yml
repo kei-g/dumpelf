@@ -18,7 +18,7 @@ jobs:
         run: env PATH=/usr/lib/llvm-16/bin:$PATH make -j7
       - id: built_cache_id
         name: Cache built binary
-        uses: actions/cache@v2
+        uses: actions/cache@v3
         with:
           key: ${{ github.sha }}
           path: |
