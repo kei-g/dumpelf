@@ -21,7 +21,7 @@ AllowShortLoopsOnASingleLine: false
 AlwaysBreakAfterDefinitionReturnType: None
 AlwaysBreakAfterReturnType: None
 AlwaysBreakBeforeMultilineStrings: true
-AlwaysBreakTemplateDeclarations: true
+AlwaysBreakTemplateDeclarations: Yes
 AttributeMacros: []
 BasedOnStyle: Google
 BinPackArguments: true
@@ -154,7 +154,7 @@ SpacesInCStyleCastParentheses: false
 SpacesInParentheses: false
 SpacesInSquareBrackets: false
 SpaceBeforeSquareBrackets: false
-Standard: c++20
+Standard: Latest
 StatementAttributeLikeMacros: []
 StatementMacros: []
 TabWidth: 2
