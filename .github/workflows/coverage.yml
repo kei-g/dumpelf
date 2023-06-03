@@ -1,22 +1,26 @@
 jobs:
   coverage:
+    container:
+      image: snowstep/llvm@${{ needs.digest.outputs.llvm }}
     name: Check code coverages
+    needs:
+      - digest
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
         uses: actions/checkout@v3
         with:
           fetch-depth: 1
-      - name: Install dependencies
+      - env:
+          DEBIAN_FRONTEND: noninteractive
+        name: Install dependent packages to build
         run: |
-          wget -O - https://apt.llvm.org/llvm-snapshot.gpg.key | sudo apt-key add -
-          echo deb http://apt.llvm.org/focal/ llvm-toolchain-focal-15 main | sudo tee /etc/apt/sources.list.d/llvm.list > /dev/null
-          echo deb-src http://apt.llvm.org/focal/ llvm-toolchain-focal-15 main | sudo tee -a /etc/apt/sources.list.d/llvm.list > /dev/null
-          sudo apt-get update
-          sudo apt-get install -y clang-15 libc++-15-dev libc++abi-15-dev libunwind-15-dev lld-15
+          apt-fast update
+          apt-fast upgrade -y
+          apt-fast install --no-install-recommends -y make
       - name: Coverage
         run: |
-          env PATH=/usr/lib/llvm-15/bin:$PATH make -j7 cover
+          make -j7 cover
       - if: ${{ always() }}
         name: Archive code coverages report
         uses: actions/upload-artifact@v3
@@ -27,6 +31,20 @@ jobs:
             dumpelf.profdata
             dumpelf.proflog
             dumpelf.profraw
+  digest:
+    name: Acquire digest of the latest llvm image
+    outputs:
+      llvm: ${{ steps.llvm.outputs.digest }}
+    runs-on: ubuntu-latest
+    steps:
+      - id: llvm
+        name: Acquire digest of the latest snowstep/llvm@jammy
+        run: |
+          digest=$(
+            curl -s https://hub.docker.com/v2/namespaces/snowstep/repositories/llvm/tags \
+              | jq -cr '[.results[]|select(.name=="jammy").images[]|select(.architecture=="amd64")]|max_by(.last_pushed).digest'
+          )
+          printf 'digest=%s\n' $digest | tee -a $GITHUB_OUTPUT
 name: Coverage
 on:
   pull_request:
