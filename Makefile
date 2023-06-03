@@ -15,6 +15,7 @@ CXXFLAGS+=-Werror
 CXXFLAGS+=-Wextra
 CXXFLAGS+=-fno-exceptions
 CXXFLAGS+=-fno-rtti
+CXXFLAGS+=-iquote$(PWD)/inc
 CXXFLAGS+=-pedantic
 ifeq ($(shell test $(CLANG_MAJOR_VERSION) -lt 13 && echo $$?),0)
 	CXXFLAGS+=-Wno-unknown-attributes
@@ -22,12 +23,7 @@ ifeq ($(shell test $(CLANG_MAJOR_VERSION) -lt 13 && echo $$?),0)
 else
 	CXXFLAGS+=-std=c++2b
 endif
-HEADERS+=elf.hh
-HEADERS+=formatter.hh
-HEADERS+=ini.hh
-HEADERS+=load.hh
-HEADERS+=main.hh
-HEADERS+=stdafx.hh
+HEADERS+=$(wildcard inc/*.hh)
 LD=clang++
 LDFLAGS+=-fuse-ld=lld
 OBJECTS=$(SOURCES:%.cc=%.o)
@@ -35,15 +31,10 @@ PROFILE_COV=$(TARGET).cov
 PROFILE_DATA=$(TARGET).profdata
 PROFILE_LOG=$(TARGET).proflog
 PROFILE_RAW=$(TARGET).profraw
-SOURCES+=elf.cc
-SOURCES+=formatter.cc
-SOURCES+=ini.cc
-SOURCES+=load.cc
-SOURCES+=main.cc
-SOURCES+=stdafx.cc
+SOURCES+=$(wildcard src/*.cc)
 TARGET=dumpelf
 TARGET_PCH=$(TARGET_PCH_SOURCE:%.hh=%.hh.pch)
-TARGET_PCH_SOURCE=stdafx.hh
+TARGET_PCH_SOURCE=inc/stdafx.hh
 
 all: $(TARGET)
 
@@ -59,6 +50,7 @@ distclean: clean
 
 .cc.o:
 	$(CXX) $(CXXFLAGS) -c $< -include-pch $(TARGET_PCH)
+	@mv $(notdir $(<:%.cc=%.o)) src/
 
 $(OBJECTS): $(HEADERS) $(TARGET_PCH)
 
